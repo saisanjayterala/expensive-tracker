@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expensive Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Expensive Tracker</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Expenses</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Settings</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="expense-form">
+      <h2>Add Expense</h2>
+      <form>
+        <label for="expense-name">Expense Name:</label>
+        <input type="text" id="expense-name" name="expense-name" required>
+
+        <label for="expense-date">Expense Date:</label>
+        <input type="date" id="expense-date" name="expense-date" required>
+
+        <label for="expense-amount">Expense Amount:</label>
+        <input type="number" id="expense-amount" name="expense-amount" step="0.01" required>
+
+        <label for="expense-category">Expense Category:</label>
+        <select id="expense-category" name="expense-category" required>
+          <option value="">Select a category</option>
+          <option value="housing">Housing</option>
+          <option value="transportation">Transportation</option>
+          <option value="food">Food</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="expense-notes">Expense Notes:</label>
+        <textarea id="expense-notes" name="expense-notes"></textarea>
+
+        <button type="submit">Add Expense</button>
+      </form>
+    </section>
+
+    <section class="expense-list">
+      <h2>Expenses</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Expense items will be added dynamically -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Expensive Tracker. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
