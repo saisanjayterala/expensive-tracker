@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
   }
   
   header {
@@ -29,11 +30,17 @@ body {
   }
   
   main {
-    padding: 20px;
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
   }
   
   .expense-form,
   .expense-list {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
   }
   
@@ -66,7 +73,7 @@ body {
   }
   
   button {
-    background-color: #4CAF50;
+    background-color: #007bff;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -75,7 +82,7 @@ body {
   }
   
   button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
   }
   
   footer {
