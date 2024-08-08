@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const expenseChart = document.querySelector('.expense-chart');
   const expenseAnalysis = document.querySelector('.expense-analysis');
 
-  let expenses = [];
+  let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
   function renderExpenseList() {
     expenseList.innerHTML = '';
@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     expenses.push(newExpense);
+    localStorage.setItem('expenses', JSON.stringify(expenses));
     renderExpenseList();
     renderExpenseChart();
     renderExpenseAnalysis();
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (event.target.classList.contains('delete-btn')) {
       const index = event.target.dataset.index;
       expenses.splice(index, 1);
+      localStorage.setItem('expenses', JSON.stringify(expenses));
       renderExpenseList();
       renderExpenseChart();
       renderExpenseAnalysis();
@@ -105,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('expense-category').value = expense.category;
       document.getElementById('expense-notes').value = expense.notes;
       expenses.splice(index, 1);
+      localStorage.setItem('expenses', JSON.stringify(expenses));
       renderExpenseList();
       renderExpenseChart();
       renderExpenseAnalysis();
