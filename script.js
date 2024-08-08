@@ -2,10 +2,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const expenseForm = document.querySelector('.expense-form form');
   const expenseList = document.querySelector('.expense-list table tbody');
   const cancelBtn = document.getElementById('cancel-btn');
-  const expenseChart = document.querySelector('.expense-chart');
-  const expenseAnalysis = document.querySelector('.expense-analysis');
+  const expenseChartCanvas = document.getElementById('expenseChart');
+  const categoryInput = document.getElementById('new-category');
+  const addCategoryBtn = document.getElementById('add-category');
+  const categoryList = document.getElementById('category-list');
 
   let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+  let categories = JSON.parse(localStorage.getItem('categories')) || ['Housing', 'Transportation', 'Food', 'Entertainment', 'Other'];
 
   function renderExpenseList() {
     expenseList.innerHTML = '';
@@ -14,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
       newRow.innerHTML = `
         <td>${expense.date}</td>
         <td>${expense.name}</td>
-        <td>${expense.amount}</td>
+        <td>$${expense.amount.toFixed(2)}</td>
         <td>${expense.category}</td>
         <td>${expense.notes}</td>
         <td>
@@ -27,56 +30,57 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function renderExpenseChart() {
-    expenseChart.innerHTML = '';
-    const categories = ['Housing', 'Transportation', 'Food', 'Entertainment', 'Other'];
     const categoryExpenses = categories.map(category => {
-      return expenses.filter(expense => expense.category === category.toLowerCase()).reduce((total, expense) => total + expense.amount, 0);
+      return expenses.filter(expense => expense.category === category).reduce((total, expense) => total + expense.amount, 0);
     });
 
-    const chartContainer = document.createElement('div');
-    chartContainer.classList.add('chart-container');
-
-    categories.forEach((category, index) => {
-      const categoryBar = document.createElement('div');
-      categoryBar.classList.add('category-bar');
-      categoryBar.style.height = `${categoryExpenses[index] * 2}px`;
-      categoryBar.textContent = `${category}: $${categoryExpenses[index].toFixed(2)}`;
-      chartContainer.appendChild(categoryBar);
+    new Chart(expenseChartCanvas, {
+      type: 'pie',
+      data: {
+        labels: categories,
+        datasets: [{
+          data: categoryExpenses,
+          backgroundColor: ['#6c63ff', '#f44336', '#ffa500', '#00b3b3', '#9b59b6']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Expense Analysis'
+          }
+        }
+      }
     });
-
-    expenseChart.appendChild(chartContainer);
   }
 
-  function renderExpenseAnalysis() {
-    expenseAnalysis.innerHTML = '';
-    const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
-    const averageExpense = expenses.length > 0 ? totalExpenses / expenses.length : 0;
-    const highestExpense = expenses.reduce((max, expense) => expense.amount > max ? expense.amount : max, 0);
-    const lowestExpense = expenses.length > 0 ? Math.min(...expenses.map(expense => expense.amount)) : 0;
-
-    const analysisHtml = `
-      <h2>Expense Analysis</h2>
-      <p>Total Expenses: $${totalExpenses.toFixed(2)}</p>
-      <p>Average Expense: $${averageExpense.toFixed(2)}</p>
-      <p>Highest Expense: $${highestExpense.toFixed(2)}</p>
-      <p>Lowest Expense: $${lowestExpense.toFixed(2)}</p>
-    `;
-
-    expenseAnalysis.innerHTML = analysisHtml;
+  function renderCategoryList() {
+    categoryList.innerHTML = '';
+    categories.forEach(category => {
+      const categoryItem = document.createElement('li');
+      categoryItem.textContent = category;
+      categoryItem.addEventListener('click', () => {
+        const expenseCategory = document.getElementById('expense-category');
+        expenseCategory.value = category;
+      });
+      categoryList.appendChild(categoryItem);
+    });
   }
 
   expenseForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const expenseName = document.getElementById('expense-name').value;
     const expenseDate = document.getElementById('expense-date').value;
+    const expenseName = document.getElementById('expense-name').value;
     const expenseAmount = parseFloat(document.getElementById('expense-amount').value);
     const expenseCategory = document.getElementById('expense-category').value;
     const expenseNotes = document.getElementById('expense-notes').value;
 
     const newExpense = {
-      name: expenseName,
       date: expenseDate,
+      name: expenseName,
       amount: expenseAmount,
       category: expenseCategory,
       notes: expenseNotes
@@ -86,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('expenses', JSON.stringify(expenses));
     renderExpenseList();
     renderExpenseChart();
-    renderExpenseAnalysis();
     expenseForm.reset();
   });
 
@@ -97,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('expenses', JSON.stringify(expenses));
       renderExpenseList();
       renderExpenseChart();
-      renderExpenseAnalysis();
     } else if (event.target.classList.contains('edit-btn')) {
       const index = event.target.dataset.index;
       const expense = expenses[index];
@@ -110,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('expenses', JSON.stringify(expenses));
       renderExpenseList();
       renderExpenseChart();
-      renderExpenseAnalysis();
     }
   });
 
@@ -118,7 +119,23 @@ document.addEventListener('DOMContentLoaded', function() {
     expenseForm.reset();
   });
 
+  addCategoryBtn.addEventListener('click', function() {
+    const newCategory = categoryInput.value.trim();
+    if (newCategory && !categories.includes(newCategory)) {
+      categories.push(newCategory);
+      localStorage.setItem('categories', JSON.stringify(categories));
+      renderCategoryList();
+      const expenseCategory = document.getElementById('expense-category');
+      const newOption = document.createElement('option');
+      newOption.value = newCategory;
+      newOption.textContent = newCategory;
+      expenseCategory.appendChild(newOption);
+      expenseCategory.value = newCategory;
+      categoryInput.value = '';
+    }
+  });
+
   renderExpenseList();
   renderExpenseChart();
-  renderExpenseAnalysis();
+  renderCategoryList();
 });

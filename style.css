@@ -1,4 +1,3 @@
-/* Additional CSS code with 120-130 insertions and 30 deletions */
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -44,7 +43,8 @@ main {
 
 .expense-form,
 .expense-list,
-.expense-analysis {
+.expense-analysis,
+.expense-categories {
   background-color: #fff;
   padding: 30px;
   border-radius: 8px;
@@ -54,7 +54,8 @@ main {
 
 .expense-form h2,
 .expense-list h2,
-.expense-analysis h2 {
+.expense-analysis h2,
+.expense-categories h2 {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 24px;
@@ -132,17 +133,34 @@ textarea {
   background-color: #c62828;
 }
 
-.expense-chart {
+.expense-chart-container {
   width: 100%;
-  height: 300px;
-  background-color: #f2f2f2;
-  border-radius: 8px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
-  font-weight: 500;
-  color: #6c63ff;
+}
+
+.category-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#category-list {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#category-list li {
+  background-color: #6c63ff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 footer {
